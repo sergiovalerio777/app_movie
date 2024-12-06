@@ -1,100 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(Icons.menu),
-                    Text(
-                      "The btleesss",
-                      style: GoogleFonts.fasthand(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Icon(Icons.notifications),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Actulizado",
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    "Nobiember 20024",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              Image.asset(
-                "assets/images/carro.jpg",
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    TextArturo(
-                      title:
-                        "holacamaron con cola",
-                        fontWeight: FontWeight.w900,
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    TextArturo(
-                      title:
-                      "holacamaron con cola",
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-      ),
-    );
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-class TextArturo extends StatelessWidget{
-  String title;
-  FontWeight? fontWeight;
-  double? fontArturo;
-  TextArturo({
-    required this.title,
-    this.fontWeight,
-    this.fontArturo,
-});
+class _HomePageState extends State<HomePage> {
+  List movies = [];
 
   @override
-  Widget build(BuildContext context){
-    return Text(
-      title,
-      textAlign:  TextAlign.justify,
-      style: TextStyle(
-        fontSize: fontArturo ?? 16.0,
-        fontWeight: fontWeight,
-      ),
-    );
+  void initState() {
+    super.initState();
+    getMovies();
+  }
+
+  Future<void> getMovies() async {
+    Uri _uri = Uri.parse(
+        "https://api.themoviedb.org/3/movie/popular?api_key=4ed25ac7fb1284dcd639db3db9502e08"); // Cambia <<YOUR_API_KEY>> por tu clave de TMDB
+
+    http.Response response = await http.get(_uri);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> myMap = json.decode(response.body);
+      setState(() {
+        movies = myMap["results"];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
   }
 }
