@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               Image.asset(
-                "Assets/images/carro.jpg",
+                "assets/images/carro.jpg",
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
